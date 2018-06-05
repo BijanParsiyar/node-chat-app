@@ -17,6 +17,7 @@ io.on("connection", socket => {
 
   socket.on("createMessage", newMessage => {
     console.log("The new message is: ", newMessage);
+    // io sends to everybody who is connected to our server
     io.emit("newMessage", {
       from: newMessage.from,
       text: newMessage.text,
