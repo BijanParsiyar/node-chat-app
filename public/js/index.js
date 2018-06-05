@@ -1,12 +1,8 @@
+// Connects to server - persisted/continuous data flow
 let socket = io();
 
 socket.on("connect", function() {
   console.log("Connected to server");
-
-  socket.emit("createMessage", {
-    from: "Billy",
-    text: "I can't come right now I'm busy."
-  });
 });
 
 socket.on("disconnect", function() {
