@@ -22,15 +22,19 @@ io.on("connection", socket => {
     generateMessage("Admin", "Welcome to the chat app")
   );
 
+  // Broadcast events - to everybody accept the person who just made the connection
   socket.broadcast.emit(
     "newMessage",
     generateMessage("Admin", "New user joined")
   );
 
-  socket.on("createMessage", message => {
+  socket.on("createMessage", (message, callback) => {
     console.log("The new message is: ", message);
     // io sends to everybody who is connected to our server
     io.emit("newMessage", generateMessage(message.from, message.text));
+
+    // Event Acknowledgment - to tell us if the message was sent successfully or not
+    callback("This is from the server.");
     // socket.broadcast.emit("newMessage", {
     //   from: newMessage.from,
     //   text: newMessage.text,
