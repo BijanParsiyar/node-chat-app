@@ -34,7 +34,7 @@ io.on("connection", socket => {
     io.emit("newMessage", generateMessage(message.from, message.text));
 
     // Event Acknowledgment - to tell us if the message was sent successfully or not
-    callback("This is from the server.");
+    callback();
   });
 
   socket.on("createLocationMessage", coords => {
