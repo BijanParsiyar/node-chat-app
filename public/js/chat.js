@@ -22,12 +22,34 @@ function scrollToBottom() {
   }
 }
 
+// When we first connected to the server, right away we want to emit an event which is going to start
+// the process of joining a room
+// socket.io has built in support for the idea of rooms, (these isolated areas where only certain peope // can listen and emit events )
 socket.on("connect", function() {
-  console.log("Connected to server");
+  var params = jQuery.deparam(window.location.search);
+  // starts the process on emitting join
+  socket.emit("join", params, function(err) {
+    if (err) {
+      alert(err);
+      window.location.href = "/";
+    } else {
+      console.log("No error");
+    }
+  });
 });
 
 socket.on("disconnect", function() {
   console.log("Disconnected from server");
+});
+
+socket.on("updateUserList", function(users) {
+  var ul = jQuery("<ul></ul>");
+
+  users.forEach(function(user) {
+    ul.append(jQuery("<li></li>").text(user));
+  });
+
+  jQuery("#users").html(ul);
 });
 
 socket.on("newMessage", function(message) {
@@ -86,7 +108,6 @@ jQuery("#message-form").on("submit", function(e) {
   socket.emit(
     "createMessage",
     {
-      from: "User",
       text: messageTextbox.val()
     },
     function() {
